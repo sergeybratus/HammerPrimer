@@ -40,9 +40,10 @@ Because this is something you'll type often hammer has a macro, `H_RULE`, which 
 
 ```cpp
 H_RULE(basic_parser, h_ch('a')); // equivalent to our basic_parser above
+```
 
-
-// h_ch_range lets you generate a parser for a character range, like all digits:
+```cpp
+h_ch_range lets you generate a parser for a character range, like all digits:
 H_RULE(digit, h_ch_range(0x30, 0x39));
 // or all lowercase letters
 H_RULE(lowercase_letter, h_ch_range('a', 'z'));
