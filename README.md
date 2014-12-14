@@ -42,65 +42,76 @@ Because this is something you'll type often hammer has a macro, `H_RULE`, which 
 H_RULE(basic_parser, h_ch('a')); // equivalent to our basic_parser above
 ```
 
+`h_ch_range` lets you generate a parser for a character range, like all digits:
 ```cpp
-h_ch_range lets you generate a parser for a character range, like all digits:
 H_RULE(digit, h_ch_range(0x30, 0x39));
-// or all lowercase letters
+```
+or lowercase letters
+```cpp
 H_RULE(lowercase_letter, h_ch_range('a', 'z'));
+```
 
-// h_choice lets you can take one or another parser
+
+`h_choice` lets you take first successful parser
+```cpp
 H_RULE(whitespace, h_choice(tab_parser, newline_parser, space_parser));
+```
 
-// h_in lets you parse one character from an array (h_not_in checks a character does not exist in array)
+`h_in` lets you parse one character from an array (`h_not_in` checks a character does not exist in array)
+```cpp
 H_RULE(vowel, h_in((uint8_t *)"AEIOU", 5));
+```
 
-// h_repeat_n lets you run a parser n times
+`h_repeat_n` lets you run a parser n times
+```cpp
 H_RULE(three_consecutive_vowels, h_repeat_n(vowels, 3));
+```
 
-// h_optional lets you optionally match a character. Good for terminators, etc
+`h_optional` lets you optionally match a character. Good for terminators, etc
+```cpp
 H_RULE(optional_newline, h_optional(h_ch('\n')))
+```
 
-// h_many lets you run a parser at least one time
+`h_many` lets you run a parser at least one time
+```cpp
 H_RULE(consecutive_letters, h_many(lowercase_letter));
-// TODO h_many1 does what?
+```
+<!---
+TODO h_many1 does what?
+-->
 
-// h_sequence lets you run a series of parsers
+
+`h_sequence` lets you run a series of parsers once
+```cpp
 H_RULE(words_separated_by_whitespace, h_sequence(
              consecutive_letters,   // has at least one lowercase letter
              h_optional(whitespace) // has an optional whitespace character
       ));
+```
 
-// h_whitespace lets you consume whitespace for provided parser
+
+`h_whitespace` lets you consume whitespace for provided parser
+```cpp
 H_RULE(words_separated_by_whitespace, h_sequence(h_whitespace(consecutive_letters)));
+```
 
-// h_nothing_p lets you check that the input is null
+`h_nothing_p` lets you check that the input is null
+```cpp
 H_RULE(emptiness, h_nothing_p()); // Will fail with presence of any data
+```
 
-// h_end_p lets you check the input has been fully consumed
+`h_end_p` lets you check the input has been fully consumed
+```cpp
 H_RULE(end_marker, h_end_p());
+```
 
 
+## Common Parsers
+Some common parsers are included below
 
-
-// Some common parsers are included below
-
-// All characters
+All Characters
+```cpp
 H_RULE(letter, h_choice(h_ch_range('a','z'), h_ch_range('A','Z'), NULL));
-
-// AUX.
-HParser *base64_3 = h_repeat_n(bsfdig, 4);
-HParser *base64_2 = h_sequence(bsfdig, bsfdig, bsfdig_4bit, equals, NULL);
-HParser *base64_1 = h_sequence(bsfdig, bsfdig_2bit, equals, equals, NULL);
-HParser *base64 = h_sequence(h_many(base64_3),
-h_optional(h_choice(base64_2,
-base64_1, NULL)),
-NULL);
-
 ```
 
 
-# Test c highlighting
-
-```
-
-```
