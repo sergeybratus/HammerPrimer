@@ -31,7 +31,8 @@ void register_base64_tests() {
 }
 
 int main(int argc, char** argv) {
+    init_parser();
     g_test_init(&argc, &argv, NULL);
     register_base64_tests();
-    g_test_run();
+    return g_test_run();
 }
