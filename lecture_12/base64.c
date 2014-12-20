@@ -1,28 +1,108 @@
 #include <hammer/hammer.h>
+#include <hammer/glue.h>
 #include "test_suite.h"
+#include <glib.h>
+#include <string.h>
 
 const HParser *base64;
 const HParser *b64_3oct_tmp, *b64_2oct_tmp, *b64_1oct_tmp;
 
+char BASE64_ILUT[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+char BASE64_LUT[256];
+
+void init_base64_lut() {
+    int i;
+    for (i = 0; i < 256; i++) {
+        BASE64_LUT[i] = 255;
+    }
+    for (i = 0; i < 64; i++) {
+        BASE64_LUT[BASE64_ILUT[i]] = i;
+    }
+}
+
+HParsedToken *act_b64_3oct(const HParseResult *p, void *user_data) {
+    uint8_t *octets = h_arena_malloc(p->arena, 3);
+    HParsedToken **chars = h_seq_elements(p->ast);
+    octets[0] =
+        (BASE64_LUT[chars[0]->uint] << 2)
+      | (BASE64_LUT[chars[1]->uint] >> 4);
+    octets[1] = 
+        (BASE64_LUT[chars[1]->uint] << 4)
+      | (BASE64_LUT[chars[2]->uint] >> 2);
+    octets[2] = 
+        (BASE64_LUT[chars[2]->uint] << 6)
+      | BASE64_LUT[chars[3]->uint];
+
+    HParsedToken *ret = H_MAKE_BYTES(3);
+    ret->bytes.token = octets;
+    return ret;
+}
+HParsedToken *act_b64_2oct(const HParseResult *p, void *user_data) {
+    uint8_t *octets = h_arena_malloc(p->arena, 2);
+    HParsedToken **chars = h_seq_elements(p->ast);
+    octets[0] =
+        (BASE64_LUT[chars[0]->uint] << 2)
+      | (BASE64_LUT[chars[1]->uint] >> 4);
+    octets[1] = 
+        (BASE64_LUT[chars[1]->uint] << 4)
+      | (BASE64_LUT[chars[2]->uint] >> 2);
+
+    HParsedToken *ret = H_MAKE_BYTES(2);
+    ret->bytes.token = octets;
+    return ret;
+}
+HParsedToken *act_b64_1oct(const HParseResult *p, void *user_data) {
+    uint8_t *octets = h_arena_malloc(p->arena, 1);
+    HParsedToken **chars = h_seq_elements(p->ast);
+    octets[0] =
+        (BASE64_LUT[chars[0]->uint] << 2)
+      | (BASE64_LUT[chars[1]->uint] >> 4);
+
+    HParsedToken *ret = H_MAKE_BYTES(1);
+    ret->bytes.token = octets;
+    return ret;
+}
+
 void init_parser() {
-    HParser *digit = h_ch_range(0x30, 0x39);
-    HParser *upper = h_ch_range(0x41, 0x5a);
-    HParser *lower = h_ch_range(0x61, 0x7a);
+    H_RULE(digit, h_ch_range(0x30, 0x39));
+    H_RULE(upper, h_ch_range(0x41, 0x5a));
+    H_RULE(lower, h_ch_range(0x61, 0x7a));
 
-    HParser *plus = h_ch('+');
-    HParser *slash = h_ch('/');
+    H_RULE(plus, h_ch('+'));
+    H_RULE(slash, h_ch('/'));
 
-    HParser *b64char = h_choice(digit, upper, lower, plus, slash, NULL);
-    HParser *b64char_4bit = h_in((uint8_t*)"AEIMQUYcgkosw048", 16);
-    HParser *b64char_2bit = h_in((uint8_t*)"AQgw", 4);
-    HParser *equals = h_ch('=');
+    H_RULE(b64char, h_choice(digit, upper, lower, plus, slash, NULL));
+    H_RULE(b64char_4bit, h_in((uint8_t*)"AEIMQUYcgkosw048", 16));
+    H_RULE(b64char_2bit, h_in((uint8_t*)"AQgw", 4));
+    H_RULE(equals, h_ch('='));
     
-    HParser *b64_3oct = h_repeat_n(b64char, 4);
-    HParser *b64_2oct = h_sequence(b64char, b64char, b64char_4bit, equals, NULL);
-    HParser *b64_1oct = h_sequence(b64char, b64char_2bit, equals, equals, NULL);
-    base64 = h_sequence(h_many(b64_3oct),
+    H_ARULE(b64_3oct, h_repeat_n(b64char, 4));
+    H_ARULE(b64_2oct, h_sequence(b64char, b64char, b64char_4bit, equals, NULL));
+    H_ARULE(b64_1oct, h_sequence(b64char, b64char_2bit, equals, equals, NULL));
+    H_RULE(base64_main, h_sequence(h_many(b64_3oct),
                         h_optional(h_choice(b64_2oct, b64_1oct, NULL)),
-                        h_end_p(), NULL);
+                        h_end_p(), NULL));
+    init_base64_lut();
+    base64 = base64_main;
+    b64_3oct_tmp = b64_3oct;
+    b64_2oct_tmp = b64_2oct;
+    b64_1oct_tmp = b64_1oct;
+}
+
+static void test_b64_3oct() {
+    HParseResult *octets = h_parse(b64_3oct_tmp, "Zm9v", 4);
+    g_assert_cmpuint(octets->ast->token_type, ==, TT_BYTES);
+    g_assert(0 == memcmp(octets->ast->bytes.token, "foo", 3));
+}
+static void test_b64_2oct() {
+    HParseResult *octets = h_parse(b64_2oct_tmp, "Zm8=", 4);
+    g_assert_cmpuint(octets->ast->token_type, ==, TT_BYTES);
+    g_assert(0 == memcmp(octets->ast->bytes.token, "fo", 2));
+}
+static void test_b64_1oct() {
+    HParseResult *octets = h_parse(b64_1oct_tmp, "Zg==", 4);
+    g_assert_cmpuint(octets->ast->token_type, ==, TT_BYTES);
+    g_assert(0 == memcmp(octets->ast->bytes.token, "f", 1));
 }
 
 static void test_0oct() {
@@ -88,6 +168,10 @@ void register_base64_tests() {
     g_test_add_func("/fail/cve/2004/0000", test_cve_2004_0600);
     g_test_add_func("/fail/padding/3", test_3_padding);
     g_test_add_func("/fail/padding/4", test_4_padding);
+
+    g_test_add_func("/match/3oct", test_b64_3oct);
+    g_test_add_func("/match/2oct", test_b64_2oct);
+    g_test_add_func("/match/1oct", test_b64_1oct);
 }
 
 
