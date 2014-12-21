@@ -135,5 +135,8 @@ That is, HAction functions must also take a user_data whether or not they use it
 
 **Files** in lecture_13/
 * [json.c](lecture_13/json.c)
+* [json.h](lecture_13/json.h)
+* [array.json](lecture_13/array.json)
+* [object.json](lecture_13/object.json)
 * [Makefile](lecture_13/Makefile)
 * [test_suite.h](lecture_13/test_suite.h)
