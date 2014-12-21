@@ -98,3 +98,8 @@ H_RULE(letter, h_choice(h_ch_range('a','z'), h_ch_range('A','Z'), NULL));
 ```
 
 
+## TODO
+h_sepBy
+h_middle
+h_indirect
+
