@@ -1,7 +1,7 @@
-all: base64
+all: json 
 
-base64: base64.c
-	gcc -o base64 base64.c -lhammer `pkg-config --libs glib-2.0`
+json: json.c
+	gcc -o json json.c -lhammer `pkg-config --libs --cflags glib-2.0`
 
 clean:
-	rm base64	
+	rm json
