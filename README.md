@@ -115,21 +115,22 @@ System requirements:
 * [Makefile](lecture_12/Makefile)
 * [test_suite.h](lecture_12/test_suite.h)
 
+**Changes in Hammer** since recording time: 
+3:50 -- HAction function signatures are now:
+HParsedToken* func(const HParseResult *p, void *user_data);
+That is, HAction functions must also take a user_data whether or not they use it.
+
+
 ## Lecture 13 - JSON Parser
 
 **URL**: [https://www.youtube.com/watch?v=2OVvBoOGaL0](https://www.youtube.com/watch?v=2OVvBoOGaL0&index=13&list=PLMAs0n8Mjs9o2I4KZ14gQr2osDsd3YPoT)
 
 **Abstract**: Creating a JSON Parser.
 
+**Notes**:
+13:43 -- act_json_object is changed to act_json_object_main abruptly. Ignore this, act_json_object works.
+
 **Files** in lecture_13/
 * [json.c](lecture_13/json.c)
 * [Makefile](lecture_13/Makefile)
 * [test_suite.h](lecture_13/test_suite.h)
-
-
-
-
-Notes: (YMMV & gotchas)
-
-Changes in Hammer since recording time: 
-10:15 -- 
