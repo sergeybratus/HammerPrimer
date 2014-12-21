@@ -58,10 +58,7 @@ H_RULE(optional_newline, h_optional(h_ch('\n')))
 ```cpp
 H_RULE(consecutive_letters, h_many(lowercase_letter));
 ```
-<!---
-TODO h_many1 does what?
--->
-
+`h_many1` is the same as h_many, but it must apply its parser at least once
 
 `h_sequence` lets you run a series of parsers once
 ```cpp
