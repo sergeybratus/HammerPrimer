@@ -85,6 +85,25 @@ H_RULE(emptiness, h_nothing_p()); // Will fail with presence of any data
 H_RULE(end_marker, h_end_p());
 ```
 
+## Actions
+
+Without defining corresponding actions, these parsers can only validate data conforms to a specification, they cannot actually convert an input into an output.
+
+To do so, we change our `H_RULE` parsers into `H_ARULE`. Hammer will then expect a function that corresponds to the parser name.
+
+That is, if we define a parser like so:
+
+```cpp
+H_ARULE(basic_parser, h_ch('a'));
+```
+
+Then we would need to create a corresponding function, act_basic_parser, like so:
+
+```cpp
+HParsedToken *act_basic_parser(const HParseResult *p, void *user_data) {
+}
+```
+Note the function signature must be identical to the one above, even if you don't need user_data.
 
 ## Common Parsers
 Some common parsers are included below
