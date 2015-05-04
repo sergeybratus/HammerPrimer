@@ -2,10 +2,6 @@
 
 Introduction to using the Hammer parser construction toolkit by Meredith L. Patterson
 
-For videos, scroll down.
-
-For hammer cheatsheet, check out [cheatsheet.md](cheatsheet.md)
-
 #Table of Contents
 
   * [Lecture 1 - Introduction](#lecture-1---introduction)
@@ -128,10 +124,7 @@ That is, HAction functions must also take a user_data whether or not they use it
 **Abstract**: Creating a JSON Parser.
 
 **Notes**:
-`h_literal` is not available in hammer anymore. Put this at the top of your file:
-`#define h_literal(s) h_token(s, sizeof(s)-1)`
-
-13:43 -- act_json_object is changed to act_json_object_main abruptly. Ignore this, act_json_object works.
+13:43 -- act_json_object is changed to act_json_object_main abruptly. Ignore this, act_json_object is correct.
 
 **Files** in lecture_13/
 * [json.c](lecture_13/json.c)
