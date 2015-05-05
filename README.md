@@ -1,6 +1,41 @@
-# Hammer Primer
+# Hammer Primer (beta-test)
 
 Introduction to using the Hammer parser construction toolkit by Meredith L. Patterson
+The Hammer repository is at 
+
+# Help us "beta-test" this primer!
+
+These lectures introduce Hammer, a kit for practical construction of
+secure parsers in C++ and various other languages used in production
+programming. The point of Hammer is to save time and effort of the
+practical industry programmer who needs to deal with parsing
+potentially hostile inputs (and these days it's pretty much everyone
+coding any kind of Internet communications).
+
+Hammer needs you to follow a particular programming/design pattern:
+the code that validates the inputs (and actually _defines_ what the
+valid inputs are) comes first, before any actions on the data parsed
+out of these inputs. This is important, because acting on the input
+data before the entire message has been fully parsed and recognized as
+correctly formed is the most common weakness that leads to memory
+corruption. 
+
+The lectures introduce necessary theory concepts as they go; no
+special knowledge of parsing is required, only interest in how to do
+it right, i.e., with the least chance of the parser being exploited by
+crafted inputs. If you feel that any part of these lectures can be
+made more accessible by a brief introduction of a relevant concept,
+please let us know!
+
+This is an early release, and yet Hammer has already moved forward
+since these lectures were recorded. Whenever today's Hammer works
+differently than described in the lectures, annotations and/or comments
+have been added to the video.
+
+Please feel free to contribute writeups on any build configuration
+problems you encountered and your solutions! Similarly, please feel
+free to contribute examples of your own parsers.
+
 
 #Table of Contents
 
