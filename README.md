@@ -7,26 +7,26 @@ The Hammer repository is at [github.com/UpstandingHackers/hammer](https://github
 # Help us "beta-test" this primer!
 
 These lectures introduce Hammer, a kit for practical construction of
-secure parsers in C++ and various other languages used in production
-programming. The point of Hammer is to save time and effort of the
-practical industry programmer who needs to deal with parsing
-potentially hostile inputs (and these days it's pretty much everyone
+secure parsers in C, C++, and other languages used in production
+programming. The point of Hammer is to save the time and effort of 
+practical industry programmers who need to deal with parsing
+potentially hostile inputs (which, these days, is pretty much everyone
 coding any kind of Internet communications).
 
 Hammer needs you to follow a particular programming/design pattern:
 the code that validates the inputs (and actually _defines_ what the
 valid inputs are) comes first, before any actions on the data parsed
-out of these inputs. This is important, because acting on the input
-data before the entire message has been fully parsed and recognized as
+out of these inputs. This is important, because acting on input data
+before the entire message has been fully parsed and recognized as
 correctly formed is the most common weakness that leads to memory
-corruption. 
+corruption.
 
-The lectures introduce necessary theory concepts as they go; no
-special knowledge of parsing is required, only interest in how to do
-it right, i.e., with the least chance of the parser being exploited by
-crafted inputs. If you feel that any part of these lectures can be
-made more accessible by a brief introduction of a relevant concept,
-please let us know!
+The lectures introduce necessary theory concepts as they go. No
+special knowledge of parsing is required, only an interest in how to
+do it right, i.e., with the lowest chance of the parser being
+exploited by crafted inputs. If you feel that any part of these
+lectures can be made more accessible by a brief introduction of a
+relevant concept, please let us know!
 
 This is an early release, and yet Hammer has already moved forward
 since these lectures were recorded. Whenever today's Hammer works
@@ -60,8 +60,8 @@ free to contribute examples of your own parsers.
 
 **Abstract**: Parser Combinators and Hammer are introduced, course outline.
 System requirements: 
-* Linux
-* OS X with homebrew or macports
+* Linux, or
+* OS X with homebrew or macports, or
 * Windows with virtual machine
 
 ## Lecture 2 - JSON/HTTP
@@ -150,7 +150,7 @@ System requirements:
 **Changes in Hammer** since recording time: 
 3:50 -- HAction function signatures are now:
 HParsedToken* func(const HParseResult *p, void *user_data);
-That is, HAction functions must also take a user_data whether or not they use it.
+That is, HAction functions must also take a user_data whether or not they use it. (This is 
 
 
 ## Lecture 13 - JSON Parser
