@@ -1,6 +1,9 @@
-# Hammer Primer (beta-test)
+# Hammer Primer (outdated beta-test)
 
 Introduction to using the Hammer parser construction toolkit by Meredith L. Patterson
+
+*The code of Hammer has evolved and does not match the after (and including lecture 11).
+If you code along, you will have to make adjustments to the new codebase.*
 
 The Hammer repository is at [github.com/UpstandingHackers/hammer](https://github.com/UpstandingHackers/hammer)
 
