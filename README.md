@@ -38,7 +38,7 @@ problems you encountered and your solutions! Similarly, please feel
 free to contribute examples of your own parsers.
 
 
-#Table of Contents
+# Table of Contents
 
   * [Lecture 1 - Introduction](#lecture-1---introduction)
   * [Lecture 2 - JSON/HTTP](#lecture-2---jsonhttp)
@@ -148,9 +148,9 @@ System requirements:
 * [test_suite.h](lecture_12/test_suite.h)
 
 **Changes in Hammer** since recording time: 
-3:50 -- HAction function signatures are now:
-HParsedToken* func(const HParseResult *p, void *user_data);
-That is, HAction functions must also take a user_data whether or not they use it. (This is 
+3:50 -- `HAction` function signatures are now:
+`HParsedToken* func(const HParseResult *p, void *user_data);`
+That is, `HAction` functions must also take a `user_data` whether or not they use it.
 
 
 ## Lecture 13 - JSON Parser
@@ -160,7 +160,7 @@ That is, HAction functions must also take a user_data whether or not they use it
 **Abstract**: Creating a JSON Parser.
 
 **Notes**:
-13:43 -- act_json_object is changed to act_json_object_main abruptly. Ignore this, act_json_object is correct.
+13:43 -- `act_json_object` is changed to `act_json_object_main` abruptly. Ignore this, `act_json_object` is correct.
 
 **Files** in lecture_13/
 * [json.c](lecture_13/json.c)
